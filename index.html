@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>23 latko ❤️</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#09070c;color:#fff;font-family:Georgia,"Times New Roman",serif}
+body{background:radial-gradient(circle at 50% 30%,#432742,#160e1b 55%,#07060a)}
+#app{position:relative;width:100%;height:100svh;display:grid;place-items:center}
+.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.035);transition:opacity 1s ease,transform 5s ease}
+.photo.on{opacity:1;transform:scale(1)}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.18) 45%,rgba(0,0,0,.7))}
+.text{position:absolute;z-index:3;width:min(94%,1000px);padding:24px;text-align:center;opacity:0;transform:translateY(15px);transition:opacity .8s,transform .8s;pointer-events:none}
+.text.on{opacity:1;transform:none}
+.bday{font-size:clamp(2rem,8vw,6rem);font-weight:700;line-height:1.08;text-shadow:0 5px 28px #000}
+.ded{font-size:clamp(1.02rem,3.8vw,2rem);line-height:1.55;text-shadow:0 3px 18px #000;max-height:82svh;overflow:auto}
+.last{font-size:clamp(2rem,8vw,6rem);font-weight:700;line-height:1.08;text-shadow:0 5px 28px #000}
+#start{position:absolute;z-index:10;inset:0;display:grid;place-items:center;padding:24px;text-align:center;background:rgba(7,5,9,.91);transition:opacity .5s}
+#start.hide{opacity:0;pointer-events:none}
+.card{max-width:600px;padding:32px 24px;border:1px solid rgba(255,255,255,.2);border-radius:26px;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);box-shadow:0 20px 80px rgba(0,0,0,.5)}
+.card h1{font-size:clamp(2rem,8vw,4rem);margin:0 0 12px}.card p{font-size:1.05rem;line-height:1.5;margin:0 0 22px}
+button{border:0;border-radius:999px;padding:15px 26px;font:inherit;font-weight:700;cursor:pointer;background:#fff;color:#201521;box-shadow:0 8px 30px #0006}
+#bar{position:absolute;z-index:5;left:18px;right:18px;bottom:17px;height:3px;border-radius:9px;background:#fff3;overflow:hidden}
+#fill{height:100%;width:0;background:#fff}
+#soundcloud{position:absolute;z-index:2;width:1px;height:1px;opacity:.01;pointer-events:none;left:-10px;bottom:-10px}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="photos"></div><div class="shade"></div>
+<div id="bday" class="text bday">Wszystkiego najlepszego 23 latko !</div>
+<div id="ded" class="text ded">
+Żebyś zawsze wiedziała jak spojrzysz na te zdjęcia, że mimo to, że znamy się już trochę tych lat i mamy dużo wspólnych wspomnień to zawsze wierzę w ciebie oraz trzymam kciuki, bo ambicji to akurat ci nie brakuje.<br><br>
+Łap z życia wszystko co możesz: podróżuj, spełniaj marzenia, realizuj wyznaczone cele. Przede wszystkim łap wspomnienia, które będą towarzyszyć ci przez całe twoje życie.<br><br>
+Niech twoje 23 urodziny będą dla ciebie super spędzonym czasem i przemyśleniem jak dalej tworzyć swoją piękną historię!<br><br>
+Buziaki Zuzia ❤️
+</div>
+<div id="last" class="text last">A, zapomniałabym :<br>WIĘCEJ WSPÓLNYCH ZDJĘĆ! 🥹</div>
+<div id="bar"><div id="fill"></div></div>
+<div id="start"><div class="card"><h1>23 latko ❤️</h1><p>Mała niespodzianka czeka właśnie tutaj.<br>Włącz dźwięk i rozpocznij od początku.</p><button id="go">Otwórz niespodziankę ✨</button></div></div>
+</div>
+
+<!-- YouTube source requested by the user. Browsers may block autoplay; the start button is intentionally required. -->
+<iframe id="soundcloud" title="music" src="https://www.youtube.com/embed/e40xuiyhJ7E?enablejsapi=1&playsinline=1&controls=0&loop=1&playlist=e40xuiyhJ7E" allow="autoplay"></iframe>
+
+<script>
+const imageNames = [
+  "zdjecie1.jpg","zdjecie1.jpeg","zdjecie1.png","zdjecie1.webp"
+];
+const holder=document.getElementById("photos");
+const possible=[];
+for(let i=1;i<=7;i++){
+  const p=document.createElement("img");
+  p.className="photo"; p.alt="Wspólne zdjęcie "+i;
+  const candidates=["zdjecie"+i+".jpg","zdjecie"+i+".jpeg","zdjecie"+i+".png","zdjecie"+i+".webp"];
+  let n=0;
+  const tryNext=()=>{ if(n<candidates.length){p.src=candidates[n++]} };
+  p.onerror=tryNext; tryNext(); holder.appendChild(p); possible.push(p);
+}
+const bday=document.getElementById("bday"),ded=document.getElementById("ded"),last=document.getElementById("last"),start=document.getElementById("start"),fill=document.getElementById("fill"),music=document.getElementById("soundcloud");
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function progress(ms){fill.style.transition="none";fill.style.width="0";requestAnimationFrame(()=>{fill.style.transition=`width ${ms}ms linear`;fill.style.width="100%"})}
+function yt(cmd){try{music.contentWindow.postMessage(JSON.stringify({event:"command",func:cmd,args:[]}),"*")}catch(e){}}
+async function run(){
+ start.classList.add("hide");
+ yt("playVideo");
+ for(let i=0;i<possible.length;i++){
+   possible[i].classList.add("on"); progress(5000); await wait(5000); possible[i].classList.remove("on");
+ }
+ bday.classList.add("on"); progress(4500); await wait(4500); bday.classList.remove("on"); fill.style.width="0"; await wait(1000);
+ ded.classList.add("on"); progress(30000); await wait(30000); ded.classList.remove("on"); await wait(500);
+ last.classList.add("on"); progress(9000); await wait(9000);
+}
+document.getElementById("go").addEventListener("click",run);
+</script>
+</body>
+</html>
